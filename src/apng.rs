@@ -7,8 +7,8 @@ use std::io::{self, Write};
 use std::mem;
 
 #[derive(Clone, Debug, PartialEq)]
-struct APNG {
-    images: Vec<PNGImage>, // The successive png images
+pub struct APNG {
+    pub images: Vec<PNGImage>, // The successive png images
 }
 
 impl APNG {
@@ -30,16 +30,16 @@ impl APNG {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-struct PNGImage {
-    width: u32,
-    height: u32,
-    data: Vec<u8>,
-    color_type: png::ColorType,
-    bit_depth: png::BitDepth,
+pub struct PNGImage {
+    pub width: u32,
+    pub height: u32,
+    pub data: Vec<u8>,
+    pub color_type: png::ColorType,
+    pub bit_depth: png::BitDepth,
 }
 
 #[derive(Clone, Debug, PartialEq)]
-struct Config {
+pub struct Config {
     pub width: u32,
     pub height: u32,
     /// number of frames
@@ -71,7 +71,7 @@ impl Config {
 }
 
 #[derive(Debug, PartialEq)]
-struct Encoder<'a, W: io::Write> {
+pub struct Encoder<'a, W: io::Write> {
     config: Config,
     w: &'a mut W,
     seq_num: u32,
@@ -91,14 +91,14 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     }
 
     // all png images encode to apng
-    pub fn encode_all(&mut self, apng: APNG) -> APNGResult<()> {
+    pub fn encode_all(&mut self, apng: APNG, frame: Option<&Frame>) -> APNGResult<()> {
         let mut i = 0;
         for v in apng.images.iter() {
             if i == 0 {
-                Self::write_fc_tl(self, None)?;
+                Self::write_fc_tl(self, frame)?;
                 Self::write_idats(self, &v.data)?;
             } else {
-                Self::write_fc_tl(self, None)?;
+                Self::write_fc_tl(self, frame)?;
                 Self::write_fd_at(self, &v.data)?;
             }
             i += 1;
@@ -139,7 +139,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         buf.write_u32::<BigEndian>(frame.and_then(|f| f.offset_x).unwrap_or(0))?;
         buf.write_u32::<BigEndian>(frame.and_then(|f| f.offset_y).unwrap_or(0))?;
         buf.write_u16::<BigEndian>(frame.and_then(|f| f.delay_num).unwrap_or(1))?;
-        buf.write_u16::<BigEndian>(frame.and_then(|f| f.delay_den).unwrap_or(5))?;
+        buf.write_u16::<BigEndian>(frame.and_then(|f| f.delay_den).unwrap_or(3))?;
         buf.write_uint::<BigEndian>(
             frame
                 .and_then(|f| f.dispose_op)
@@ -277,7 +277,7 @@ pub enum BlendOp {
     ApngBlendOpOver = 1,
 }
 
-fn load_png(filepath: &str) -> AppResult<PNGImage> {
+pub fn load_png(filepath: &str) -> AppResult<PNGImage> {
     let file = File::open(filepath).unwrap();
     let decoder = png::Decoder::new(file);
     let (info, mut reader) = decoder.read_info().unwrap();
