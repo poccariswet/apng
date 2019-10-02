@@ -2,7 +2,7 @@ use apng;
 use apng::Encoder;
 use apng::{Frame, PNGImage, APNG};
 use std::fs::File;
-use std::io::{BufWriter, Read, Write};
+use std::io::BufWriter;
 use std::path::Path;
 
 fn main() {
@@ -21,11 +21,11 @@ fn main() {
     }
 
     let path = Path::new(r"sample/out.png");
-    let mut out_file = File::create(path).unwrap();
-    let mut out = BufWriter::new(out_file);
+    let mut out = BufWriter::new(File::create(path).unwrap());
 
     let mut apng = APNG { images: pngs };
-    let mut encoder = Encoder::new(&mut out, apng.create_config(0).unwrap()).unwrap();
+    let config = apng.create_config(0).unwrap();
+    let mut encoder = Encoder::new(&mut out, config).unwrap();
     let frame = Frame {
         delay_num: Some(1),
         delay_den: Some(2),
