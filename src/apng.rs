@@ -140,18 +140,15 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         buf.write_u32::<BigEndian>(frame.and_then(|f| f.offset_y).unwrap_or(0))?;
         buf.write_u16::<BigEndian>(frame.and_then(|f| f.delay_num).unwrap_or(1))?;
         buf.write_u16::<BigEndian>(frame.and_then(|f| f.delay_den).unwrap_or(3))?;
-        buf.write_uint::<BigEndian>(
-            frame
-                .and_then(|f| f.dispose_op)
-                .unwrap_or(DisposeOp::ApngDisposeOpNone) as u64,
-            1,
-        )?;
-        buf.write_uint::<BigEndian>(
-            frame
-                .and_then(|f| f.blend_op)
-                .unwrap_or(BlendOp::ApngBlendOpSource) as u64,
-            1,
-        )?;
+
+        let dis = frame
+            .and_then(|f| f.dispose_op)
+            .unwrap_or(DisposeOp::ApngDisposeOpNone) as u8;
+        let ble = frame
+            .and_then(|f| f.blend_op)
+            .unwrap_or(BlendOp::ApngBlendOpSource) as u8;
+        buf.write_all(&[dis, ble])?;
+
         self.write_chunk(&buf, *b"fcTL")?;
         self.seq_num += 1;
 
