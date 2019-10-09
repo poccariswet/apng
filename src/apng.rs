@@ -42,9 +42,9 @@ pub struct PNGImage {
 pub struct Config {
     pub width: u32,
     pub height: u32,
-    /// number of frames
+    // number of frames
     pub num_frames: u32,
-    /// count of loop, 0 is infinite looping
+    // count of loop, 0 is infinite looping
     pub num_plays: u32,
     pub color: png::ColorType,
     pub depth: png::BitDepth,
@@ -52,12 +52,12 @@ pub struct Config {
 }
 
 impl Config {
-    /// Returns the bits per pixel
+    // Returns the bits per pixel
     pub fn bytes_per_pixel(&self) -> usize {
         self.color.samples() * self.depth as usize
     }
 
-    /// Returns the number of bytes needed for one deinterlaced row
+    // Returns the number of bytes needed for one deinterlaced row
     pub fn raw_row_length(&self) -> usize {
         let bits = self.width as usize * self.color.samples() * self.depth as usize;
         let extra = bits % 8;
@@ -158,7 +158,21 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     fn write_fd_at(&mut self, data: &[u8]) -> APNGResult<()> {
         let mut buf = vec![];
         buf.write_u32::<BigEndian>(self.seq_num)?;
+        self.make_image_buffer(data, &mut buf)?;
+        self.write_chunk(&buf, *b"fdAT")?;
+        self.seq_num += 1;
+        Ok(())
+    }
 
+    // Writes the image data.
+    fn write_idats(&mut self, data: &[u8]) -> APNGResult<()> {
+        let mut buf = vec![];
+        self.make_image_buffer(data, &mut buf)?;
+        self.write_chunk(&buf, *b"IDAT")?;
+        Ok(())
+    }
+
+    fn make_image_buffer(&mut self, data: &[u8], buf: &mut Vec<u8>) -> APNGResult<()> {
         let bpp = self.config.bytes_per_pixel();
         let in_len = self.config.raw_row_length() - 1;
         let mut prev = vec![0; in_len];
@@ -167,7 +181,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         if data_size != data.len() {
             return Err(APNGError::WrongDataSize(data_size, data.len()));
         }
-        let mut zlib = ZlibEncoder::new(&mut buf, Compression::fast());
+        let mut zlib = ZlibEncoder::new(buf, Compression::fast());
         let filter_method = self.config.filter;
         for line in data.chunks(in_len) {
             current.copy_from_slice(&line);
@@ -177,43 +191,17 @@ impl<'a, W: io::Write> Encoder<'a, W> {
             mem::swap(&mut prev, &mut current);
         }
         zlib.finish()?;
-
-        self.write_chunk(&buf, *b"fdAT")?;
-        self.seq_num += 1;
         Ok(())
     }
 
-    /// Writes the image data.
-    fn write_idats(&mut self, data: &[u8]) -> APNGResult<()> {
-        let bpp = self.config.bytes_per_pixel();
-        let in_len = self.config.raw_row_length() - 1;
-        let mut prev = vec![0; in_len];
-        let mut current = vec![0; in_len];
-        let data_size = in_len * self.config.height as usize;
-        if data_size != data.len() {
-            return Err(APNGError::WrongDataSize(data_size, data.len()));
-        }
-        let mut zlib = ZlibEncoder::new(Vec::new(), Compression::fast());
-        let filter_method = self.config.filter;
-        for line in data.chunks(in_len) {
-            current.copy_from_slice(&line);
-            zlib.write_all(&[filter_method as u8])?;
-            filter(filter_method, bpp, &prev, &mut current);
-            zlib.write_all(&current)?;
-            mem::swap(&mut prev, &mut current);
-        }
-        self.write_chunk(&zlib.finish()?, *b"IDAT")?;
-        Ok(())
-    }
-
-    /// write chunk data 4 field
+    // write chunk data 4 field
     fn write_chunk(&mut self, c_data: &[u8], c_type: [u8; 4]) -> APNGResult<()> {
-        /// Header(Length and Type)
+        // Header(Length and Type)
         self.w.write_u32::<BigEndian>(c_data.len() as u32)?;
         self.w.write_all(&c_type)?;
-        /// Data
+        // Data
         self.w.write_all(c_data)?;
-        /// Footer (CRC)
+        // Footer (CRC)
         let mut crc = Crc::new();
         crc.update(&c_type);
         crc.update(c_data);
@@ -280,7 +268,7 @@ pub fn load_png(filepath: &str) -> AppResult<PNGImage> {
     let (info, mut reader) = decoder.read_info().unwrap();
     let mut buf = vec![0; info.buffer_size()];
 
-    /// read the frame
+    // read the frame
     reader.next_frame(&mut buf).unwrap();
 
     Ok(PNGImage {
