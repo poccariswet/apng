@@ -24,7 +24,7 @@ impl APNG {
             num_plays: plays,
             color: image.color_type,
             depth: image.bit_depth,
-            filter: png::FilterType::Sub, //default
+            filter: png::FilterType::NoFilter, //default
         })
     }
 }
@@ -175,14 +175,18 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     fn make_image_buffer(&mut self, data: &[u8], buf: &mut Vec<u8>) -> APNGResult<()> {
         let bpp = self.config.bytes_per_pixel();
         let in_len = self.config.raw_row_length() - 1;
+
         let mut prev = vec![0; in_len];
         let mut current = vec![0; in_len];
+
         let data_size = in_len * self.config.height as usize;
         if data_size != data.len() {
             return Err(APNGError::WrongDataSize(data_size, data.len()));
         }
-        let mut zlib = ZlibEncoder::new(buf, Compression::fast());
+
+        let mut zlib = ZlibEncoder::new(buf, Compression::best());
         let filter_method = self.config.filter;
+
         for line in data.chunks(in_len) {
             current.copy_from_slice(&line);
             zlib.write_all(&[filter_method as u8])?;
@@ -190,6 +194,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
             zlib.write_all(&current)?;
             mem::swap(&mut prev, &mut current);
         }
+
         zlib.finish()?;
         Ok(())
     }

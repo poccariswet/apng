@@ -8,11 +8,11 @@ use std::path::Path;
 fn main() {
     let files = vec![
         "sample/rust_logo1.png",
-        "sample/rust_logo2.png",
-        //"sample/rust_logo3.png",
-        //"sample/rust_logo4.png",
-        //"sample/rust_logo5.png",
-        //"sample/rust_logo6.png",
+        "sample/rust_logo3.png",
+        "sample/rust_logo3.png",
+        "sample/rust_logo4.png",
+        "sample/rust_logo5.png",
+        "sample/rust_logo6.png",
     ];
 
     let mut pngs: Vec<PNGImage> = Vec::new();
