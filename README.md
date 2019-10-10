@@ -41,3 +41,8 @@ fn main() {
 ## License
 
 [here](https://github.com/poccariswet/apng/blob/master/LICENSE)
+
+## Reference
+
+- [https://developer.mozilla.org/ja/docs/Animated_PNG_graphics](https://developer.mozilla.org/ja/docs/Animated_PNG_graphics)
+- [https://www.w3.org/TR/PNG/](https://www.w3.org/TR/PNG/)
