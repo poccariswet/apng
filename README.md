@@ -14,7 +14,7 @@ apng is animation png encoder for rust, and made in pure rust.
 fn main() {
     let files = vec![
         "sample/rust_logo1.png",
-        "sample/rust_logo3.png",
+        "sample/rust_logo.png",
         "sample/rust_logo3.png",
         "sample/rust_logo4.png",
         "sample/rust_logo5.png",
