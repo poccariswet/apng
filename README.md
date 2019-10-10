@@ -4,7 +4,7 @@ apng is animation png encoder for rust, and made in pure rust.
 
 ![animation rust logo](https://github.com/poccariswet/apng/blob/master/example/sample/out.png)
 
-## Example sage
+## Example usage
 
 ```rust
 fn main() {
@@ -37,3 +37,7 @@ fn main() {
     println!("{:?}", err)
 }
 ```
+
+## License
+
+[here](https://github.com/poccariswet/apng/blob/master/LICENSE)
