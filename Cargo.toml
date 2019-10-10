@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["poccariswet <poccariswet2727@gmail.com>"]
 edition = "2018"
 description = "APNG Encoder. But it is tiny yet."
-license = "Apache-2.0"
+license = "MIT"
 repository = "http://github.com/poccariswet/apng"
 
 
