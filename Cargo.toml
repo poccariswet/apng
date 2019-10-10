@@ -1,8 +1,12 @@
 [package]
 name = "apng"
 version = "0.1.0"
-authors = ["poccariswet <s1240231@gmail.com>"]
+authors = ["poccariswet <poccariswet2727@gmail.com>"]
 edition = "2018"
+description = "APNG Encoder. But it is tiny yet."
+license = "Apache-2.0"
+repository = "http://github.com/poccariswet/apng"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
