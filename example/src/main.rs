@@ -24,7 +24,7 @@ fn main() {
     let mut out = BufWriter::new(File::create(path).unwrap());
 
     let mut apng = APNG { images: pngs };
-    let config = apng.create_config(0).unwrap();
+    let config = apng.create_config(0).unwrap(); // 0 is loop animation.
     let mut encoder = Encoder::new(&mut out, config).unwrap();
     let frame = Frame {
         delay_num: Some(1),
