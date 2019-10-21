@@ -48,6 +48,9 @@ fn main() {
 
 [here](https://github.com/poccariswet/apng/blob/master/LICENSE)
 
+## see also
+[medium](https://medium.com/@poccariswet/how-i-developed-apng-library-for-rust-98d366f1195b)
+
 ## Reference
 
 - [https://developer.mozilla.org/ja/docs/Animated_PNG_graphics](https://developer.mozilla.org/ja/docs/Animated_PNG_graphics)
