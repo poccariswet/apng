@@ -8,29 +8,6 @@ use std::io::{self, Write};
 use std::mem;
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct APNG {
-    pub images: Vec<PNGImage>, // The successive png images
-}
-
-impl APNG {
-    pub fn create_config(&mut self, plays: u32) -> APNGResult<Config> {
-        if self.images.len() == 0 {
-            return Err(APNGError::ImagesNotFound);
-        }
-        let image = self.images[0].clone();
-        Ok(Config {
-            width: image.width,
-            height: image.height,
-            num_frames: self.images.len() as u32,
-            num_plays: plays,
-            color: image.color_type,
-            depth: image.bit_depth,
-            filter: png::FilterType::NoFilter, //default
-        })
-    }
-}
-
-#[derive(Clone, Debug, PartialEq)]
 pub struct PNGImage {
     pub width: u32,
     pub height: u32,
@@ -92,9 +69,9 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     }
 
     // all png images encode to apng
-    pub fn encode_all(&mut self, apng: APNG, frame: Option<&Frame>) -> APNGResult<()> {
+    pub fn encode_all(&mut self, images: Vec<PNGImage>, frame: Option<&Frame>) -> APNGResult<()> {
         let mut i = 0;
-        for v in apng.images.iter() {
+        for v in images.iter() {
             if i == 0 {
                 Self::write_fc_tl(self, frame)?;
                 Self::write_idats(self, &v.data)?;
@@ -239,6 +216,22 @@ pub enum DisposeOp {
 pub enum BlendOp {
     ApngBlendOpSource = 0,
     ApngBlendOpOver = 1,
+}
+
+pub fn create_config(images: &Vec<PNGImage>, plays: Option<u32>) -> APNGResult<Config> {
+    if images.len() == 0 {
+        return Err(APNGError::ImagesNotFound);
+    }
+    let default_image = images[0].clone();
+    Ok(Config {
+        width: default_image.width,
+        height: default_image.height,
+        num_frames: images.len() as u32,
+        num_plays: plays.and_then(|p| Some(p)).unwrap_or(0),
+        color: default_image.color_type,
+        depth: default_image.bit_depth,
+        filter: png::FilterType::NoFilter, //default
+    })
 }
 
 pub fn load_png(filepath: &str) -> AppResult<PNGImage> {
