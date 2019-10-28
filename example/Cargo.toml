@@ -8,3 +8,4 @@ edition = "2018"
 [dependencies]
 apng = { path = "../" }
 png = "0.15.0"
+image = "0.22.3"

@@ -2,7 +2,7 @@ use apng;
 use apng::Encoder;
 use apng::{Frame, PNGImage};
 use std::fs::File;
-use std::io::BufWriter;
+use std::io::{BufWriter, Read};
 use std::path::Path;
 
 fn main() {
@@ -16,8 +16,18 @@ fn main() {
     ];
 
     let mut png_images: Vec<PNGImage> = Vec::new();
+    /* png file path
     for f in files.iter() {
         png_images.push(apng::load_png(f).unwrap());
+    }
+    */
+
+    for f in files.iter() {
+        let mut file = File::open(f).unwrap();
+        let mut buffer = vec![];
+        file.read_to_end(&mut buffer).unwrap();
+        let img = image::load_from_memory(&buffer).unwrap();
+        png_images.push(apng::load_dynamic_image(img).unwrap());
     }
 
     let path = Path::new(r"sample/out.png");
