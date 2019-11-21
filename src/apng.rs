@@ -70,11 +70,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     }
 
     // encode each frame control
-    pub fn encode_each_frames(
-        &mut self,
-        images: Vec<PNGImage>,
-        frames: Vec<Frame>,
-    ) -> APNGResult<()> {
+    pub fn encode_each_frames(&mut self, image: PNGImage, frame: Frame) -> APNGResult<()> {
         Ok(())
     }
 
