@@ -69,9 +69,30 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         Ok(e)
     }
 
-    // encode each frame control
-    pub fn encode_each_frames(&mut self, image: PNGImage, frame: Frame) -> APNGResult<()> {
+    // write each frame control
+    pub fn write_frame(&mut self, image: PNGImage, frame: Frame) -> APNGResult<()> {
+        if self.seq_num == 0 {
+            Self::write_fc_tl(self, Some(&frame))?;
+            Self::write_idats(self, &image.data)?;
+        } else {
+            Self::write_fc_tl(self, Some(&frame))?;
+            Self::write_fd_at(self, &image.data)?;
+        }
+
         Ok(())
+    }
+
+    // finish encode, write end chunk on the last line.
+    pub fn finish_encode(&mut self) -> APNGResult<()> {
+        let encoded_frames = self.seq_num + 1;
+        if self.config.num_frames > encoded_frames {
+            return Err(APNGError::WrongFrameNums(
+                self.config.num_frames as usize,
+                encoded_frames as usize,
+            ));
+        }
+
+        Self::write_iend(self)
     }
 
     // all png images encode to apng
@@ -87,8 +108,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
             }
             i += 1;
         }
-        Self::write_iend(self)?;
-        Ok(())
+        Self::write_iend(self)
     }
 
     fn write_png_header(&mut self) -> APNGResult<()> {
@@ -152,8 +172,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     fn write_idats(&mut self, data: &[u8]) -> APNGResult<()> {
         let mut buf = vec![];
         self.make_image_buffer(data, &mut buf)?;
-        self.write_chunk(&buf, *b"IDAT")?;
-        Ok(())
+        self.write_chunk(&buf, *b"IDAT")
     }
 
     fn make_image_buffer(&mut self, data: &[u8], buf: &mut Vec<u8>) -> APNGResult<()> {
