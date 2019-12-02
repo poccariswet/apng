@@ -4,7 +4,7 @@
 [![apng at docs.rs](https://docs.rs/apng/badge.svg)](https://docs.rs/apng)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/poccariswet/apng/master/LICENSE?token=AF4FJMPRTUTCG2DAVLVTRVS5U7UJI)
 
-apng is animation png encoder for rust, and made in pure rust.
+apng is animatited png encoder for rust, and made in pure rust.
 
 <img src="https://github.com/poccariswet/apng/raw/master/example/sample/out.png" width="250">
 
