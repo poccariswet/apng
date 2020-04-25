@@ -1,9 +1,9 @@
 # apng
 
-![apng at github actions](https://github.com/poccariswet/apng/workflows/Rust/badge.svg?branch=master)
 [![apng at crates.io](https://img.shields.io/crates/v/apng.svg)](https://crates.io/crates/apng)
 [![apng at docs.rs](https://docs.rs/apng/badge.svg)](https://docs.rs/apng)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/poccariswet/apng/master/LICENSE?token=AF4FJMPRTUTCG2DAVLVTRVS5U7UJI)
+![apng at github actions](https://github.com/poccariswet/apng/workflows/Rust/badge.svg?branch=master)
 
 apng is animated png encoder for rust, and made in pure rust.
 
