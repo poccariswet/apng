@@ -1,6 +1,5 @@
-use apng;
-use apng::Encoder;
-use apng::{Frame, PNGImage};
+use apng::{Encoder, Frame, PNGImage};
+
 use std::fs::File;
 use std::io::{BufWriter, Read};
 use std::path::Path;
