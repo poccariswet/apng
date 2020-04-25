@@ -1,4 +1,4 @@
 mod apng;
 mod errors;
 
-pub use apng::*;
+pub use crate::apng::*;
