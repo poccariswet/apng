@@ -7,7 +7,7 @@
 
 apng is animated png encoder for rust, and made in pure rust.
 
-<img src="https://github.com/poccariswet/apng/raw/master/example/sample/out.png" width="250">
+<img src="https://github.com/poccariswet/apng/blob/master/examples/_rust_logo/out.png" width="250">
 
 ## Example usage
 
