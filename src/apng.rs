@@ -86,6 +86,32 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         Ok(())
     }
 
+    // write each frame control
+    pub fn write_frame(&mut self, image: PNGImage, frame: Frame) -> APNGResult<()> {
+        if self.seq_num == 0 {
+            Self::write_fc_tl(self, Some(&frame))?;
+            Self::write_idats(self, &image.data)?;
+        } else {
+            Self::write_fc_tl(self, Some(&frame))?;
+            Self::write_fd_at(self, &image.data)?;
+        }
+
+        Ok(())
+    }
+
+    // finish encode, write end chunk on the last line.
+    pub fn finish_encode(&mut self) -> APNGResult<()> {
+        let encoded_frames = self.seq_num + 1;
+        if self.config.num_frames > encoded_frames {
+            return Err(APNGError::WrongFrameNums(
+                self.config.num_frames as usize,
+                encoded_frames as usize,
+            ));
+        }
+
+        Self::write_iend(self)
+    }
+
     fn write_png_header(&mut self) -> APNGResult<()> {
         self.w.write_all(b"\x89PNG\r\n\x1a\n")?;
         Ok(())
