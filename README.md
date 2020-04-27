@@ -14,12 +14,12 @@ apng is animated png encoder for rust, and made in pure rust.
 ```rust
 fn main() {
     let files = vec![
-        "sample/rust_logo1.png",
-        "sample/rust_logo2.png",
-        "sample/rust_logo3.png",
-        "sample/rust_logo4.png",
-        "sample/rust_logo5.png",
-        "sample/rust_logo6.png",
+        "rust_logo1.png",
+        "rust_logo2.png",
+        "rust_logo3.png",
+        "rust_logo4.png",
+        "rust_logo5.png",
+        "rust_logo6.png",
     ];
 
     let mut png_images: Vec<PNGImage> = Vec::new();

@@ -1,11 +1,11 @@
 [package]
-name = "example"
+name = "encode_all"
 version = "0.1.0"
 authors = ["poccariswet <poccariswet2727@gmail.com>"]
 edition = "2018"
 
 
 [dependencies]
-apng = { path = "../" }
+apng = { path = "../../" }
 png = "0.15.0"
 image = "0.22.3"
