@@ -1,0 +1,11 @@
+[package]
+name = "each_frame_speed"
+version = "0.1.0"
+authors = ["poccariswet <s1240231@gmail.com>"]
+edition = "2018"
+
+
+[dependencies]
+apng = { path = "../../" }
+png = "0.15.0"
+image = "0.22.3"

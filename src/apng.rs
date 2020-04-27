@@ -87,7 +87,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
     }
 
     // write each frame control
-    pub fn write_frame(&mut self, image: PNGImage, frame: Frame) -> APNGResult<()> {
+    pub fn write_frame(&mut self, image: &PNGImage, frame: Frame) -> APNGResult<()> {
         if self.seq_num == 0 {
             Self::write_fc_tl(self, Some(&frame))?;
             Self::write_idats(self, &image.data)?;
