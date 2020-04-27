@@ -29,7 +29,7 @@ fn main() {
         png_images.push(apng::load_dynamic_image(img).unwrap());
     }
 
-    let path = Path::new(r"output.png");
+    let path = Path::new(r"out.png");
     let mut out = BufWriter::new(File::create(path).unwrap());
 
     let config = apng::create_config(&png_images, None).unwrap();
