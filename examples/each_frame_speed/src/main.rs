@@ -1,4 +1,5 @@
-use apng::{Encoder, Frame, PNGImage};
+use apng::png::{load_dynamic_image, PNGImage};
+use apng::{Encoder, Frame};
 
 use std::fs::File;
 use std::io::{BufWriter, Read};
@@ -21,7 +22,7 @@ fn main() {
         let mut buffer = vec![];
         file.read_to_end(&mut buffer).unwrap();
         let img = image::load_from_memory(&buffer).unwrap();
-        png_images.push(apng::load_dynamic_image(img).unwrap());
+        png_images.push(load_dynamic_image(img).unwrap());
     }
 
     let path = Path::new(r"out.png");
