@@ -1,5 +1,4 @@
-use apng::png::{load_dynamic_image, PNGImage};
-use apng::{Encoder, Frame};
+use apng::{load_dynamic_image, Encoder, Frame, PNGImage};
 
 use std::fs::File;
 use std::io::{BufWriter, Read};

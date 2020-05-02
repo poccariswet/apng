@@ -1,5 +1,6 @@
 mod apng;
 mod errors;
-pub mod png;
+mod png;
 
 pub use crate::apng::*;
+pub use crate::png::*;
