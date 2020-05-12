@@ -45,6 +45,12 @@ fn main() {
 }
 ```
 
+### customize each frame speed
+
+<img src="https://github.com/poccariswet/apng/blob/master/examples/each_frame_speed/out.png" width="250">
+
+sample code is [here](https://github.com/poccariswet/apng/tree/master/examples/each_frame_speed).
+
 ## License
 
 [here](https://github.com/poccariswet/apng/blob/master/LICENSE)
