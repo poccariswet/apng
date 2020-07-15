@@ -49,6 +49,19 @@ fn main() {
 
 <img src="https://github.com/poccariswet/apng/blob/master/examples/each_frame_speed/out.png" width="250">
 
+```rust
+    let mut i = 1;
+    for image in png_images.iter() {
+        i += 1;
+        let frame = Frame {
+            delay_num: Some(1),
+            delay_den: Some(i), // 2, 3, 4, 5, 6, 7
+            ..Default::default()
+        };
+        encoder.write_frame(image, frame).unwrap();
+    }
+```
+
 sample code is [here](https://github.com/poccariswet/apng/tree/master/examples/each_frame_speed).
 
 ## License
