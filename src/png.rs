@@ -1,5 +1,6 @@
 use super::errors::AppResult;
-use image::GenericImageView;
+use image::{DynamicImage, GenericImageView};
+use png::BitDepth;
 use std::fs::File;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -14,15 +15,14 @@ pub struct PNGImage {
 // make PNGImage from image::DynamicImage.
 pub fn load_dynamic_image(img: image::DynamicImage) -> AppResult<PNGImage> {
     let (width, height) = img.dimensions();
-    let color = img.color();
-    let (color_type, bit_depth) = convert_color_png_type(color);
+    let (data, color_type, bit_depth) = get_raw_buffer_dynamic_image(img);
 
     Ok(PNGImage {
         width: width,
         height: height,
-        data: img.raw_pixels(),
-        color_type: color_type,
-        bit_depth: bit_depth,
+        data,
+        color_type,
+        bit_depth,
     })
 }
 
@@ -45,17 +45,51 @@ pub fn load_png(filepath: &str) -> AppResult<PNGImage> {
     })
 }
 
-// cast image::ColorType to png::ColorType
-fn convert_color_png_type(ct: image::ColorType) -> (png::ColorType, png::BitDepth) {
+/// Safely convert a Vec<u16> to a Vec<u8>
+fn vec16_to_vec8(input: Vec<u16>) -> Vec<u8> {
+    let mut output = Vec::with_capacity(input.len() * 2);
+    for nb in input {
+        output.extend(&nb.to_le_bytes());
+    }
+    output
+}
+
+/// convert an [`image::DynamicImage`] into a raw buffer, a [`png::ColorType`] and a [`png::BitDepth`]
+fn get_raw_buffer_dynamic_image(
+    dynamic_image: DynamicImage,
+) -> (Vec<u8>, png::ColorType, png::BitDepth) {
     use png::ColorType::*;
-    let (ct, bits) = match ct {
-        image::ColorType::Gray(bits) => (Grayscale, bits),
-        image::ColorType::RGB(bits) => (RGB, bits),
-        image::ColorType::Palette(bits) => (Indexed, bits),
-        image::ColorType::GrayA(bits) => (GrayscaleAlpha, bits),
-        image::ColorType::RGBA(bits) => (RGBA, bits),
-        image::ColorType::BGRA(bits) => (RGBA, bits),
-        image::ColorType::BGR(bits) => (RGB, bits),
-    };
-    (ct, png::BitDepth::from_u8(bits).unwrap())
+
+    match dynamic_image {
+        DynamicImage::ImageRgb8(image) => (image.into_raw(), RGB, BitDepth::Eight),
+        DynamicImage::ImageLuma8(image) => (image.into_raw(), Grayscale, BitDepth::Eight),
+        DynamicImage::ImageLumaA8(image) => (image.into_raw(), GrayscaleAlpha, BitDepth::Eight),
+        DynamicImage::ImageRgba8(image) => (image.into_raw(), RGBA, BitDepth::Eight),
+        DynamicImage::ImageBgr8(image) => (
+            DynamicImage::ImageBgr8(image).into_rgb8().into_raw(),
+            RGB,
+            BitDepth::Eight,
+        ),
+        DynamicImage::ImageBgra8(image) => (
+            DynamicImage::ImageBgra8(image).into_rgb8().into_raw(),
+            RGB,
+            BitDepth::Eight,
+        ),
+        DynamicImage::ImageLuma16(image) => (
+            vec16_to_vec8(image.into_raw()),
+            Grayscale,
+            BitDepth::Sixteen,
+        ),
+        DynamicImage::ImageLumaA16(image) => (
+            vec16_to_vec8(image.into_raw()),
+            GrayscaleAlpha,
+            BitDepth::Sixteen,
+        ),
+        DynamicImage::ImageRgb16(image) => {
+            (vec16_to_vec8(image.into_raw()), RGB, BitDepth::Sixteen)
+        }
+        DynamicImage::ImageRgba16(image) => {
+            (vec16_to_vec8(image.into_raw()), RGBA, BitDepth::Sixteen)
+        }
+    }
 }
