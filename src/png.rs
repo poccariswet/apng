@@ -30,11 +30,12 @@ pub fn load_dynamic_image(img: image::DynamicImage) -> AppResult<PNGImage> {
 pub fn load_png(filepath: &str) -> AppResult<PNGImage> {
     let file = File::open(filepath).unwrap();
     let decoder = png::Decoder::new(file);
-    let (info, mut reader) = decoder.read_info().unwrap();
-    let mut buf = vec![0; info.buffer_size()];
+    let mut reader = decoder.read_info().unwrap();
+
+    let mut buf = vec![0; reader.output_buffer_size()];
 
     // read the frame
-    reader.next_frame(&mut buf).unwrap();
+    let info = reader.next_frame(&mut buf).unwrap();
 
     Ok(PNGImage {
         width: info.width,
@@ -61,18 +62,18 @@ fn get_raw_buffer_dynamic_image(
     use png::ColorType::*;
 
     match dynamic_image {
-        DynamicImage::ImageRgb8(image) => (image.into_raw(), RGB, BitDepth::Eight),
+        DynamicImage::ImageRgb8(image) => (image.into_raw(), Rgb, BitDepth::Eight),
         DynamicImage::ImageLuma8(image) => (image.into_raw(), Grayscale, BitDepth::Eight),
         DynamicImage::ImageLumaA8(image) => (image.into_raw(), GrayscaleAlpha, BitDepth::Eight),
-        DynamicImage::ImageRgba8(image) => (image.into_raw(), RGBA, BitDepth::Eight),
+        DynamicImage::ImageRgba8(image) => (image.into_raw(), Rgba, BitDepth::Eight),
         DynamicImage::ImageBgr8(image) => (
             DynamicImage::ImageBgr8(image).into_rgb8().into_raw(),
-            RGB,
+            Rgb,
             BitDepth::Eight,
         ),
         DynamicImage::ImageBgra8(image) => (
             DynamicImage::ImageBgra8(image).into_rgb8().into_raw(),
-            RGB,
+            Rgb,
             BitDepth::Eight,
         ),
         DynamicImage::ImageLuma16(image) => (
@@ -86,10 +87,10 @@ fn get_raw_buffer_dynamic_image(
             BitDepth::Sixteen,
         ),
         DynamicImage::ImageRgb16(image) => {
-            (vec16_to_vec8(image.into_raw()), RGB, BitDepth::Sixteen)
+            (vec16_to_vec8(image.into_raw()), Rgb, BitDepth::Sixteen)
         }
         DynamicImage::ImageRgba16(image) => {
-            (vec16_to_vec8(image.into_raw()), RGBA, BitDepth::Sixteen)
+            (vec16_to_vec8(image.into_raw()), Rgba, BitDepth::Sixteen)
         }
     }
 }
