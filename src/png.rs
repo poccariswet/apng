@@ -1,4 +1,4 @@
-use super::errors::AppResult;
+use super::errors::{AppError, AppResult};
 use image::{DynamicImage, GenericImageView};
 use png::BitDepth;
 use std::fs::File;
@@ -15,7 +15,7 @@ pub struct PNGImage {
 // make PNGImage from image::DynamicImage.
 pub fn load_dynamic_image(img: image::DynamicImage) -> AppResult<PNGImage> {
     let (width, height) = img.dimensions();
-    let (data, color_type, bit_depth) = get_raw_buffer_dynamic_image(img);
+    let (data, color_type, bit_depth) = get_raw_buffer_dynamic_image(img)?;
 
     Ok(PNGImage {
         width: width,
@@ -58,39 +58,30 @@ fn vec16_to_vec8(input: Vec<u16>) -> Vec<u8> {
 /// convert an [`image::DynamicImage`] into a raw buffer, a [`png::ColorType`] and a [`png::BitDepth`]
 fn get_raw_buffer_dynamic_image(
     dynamic_image: DynamicImage,
-) -> (Vec<u8>, png::ColorType, png::BitDepth) {
+) -> AppResult<(Vec<u8>, png::ColorType, png::BitDepth)> {
     use png::ColorType::*;
 
     match dynamic_image {
-        DynamicImage::ImageRgb8(image) => (image.into_raw(), Rgb, BitDepth::Eight),
-        DynamicImage::ImageLuma8(image) => (image.into_raw(), Grayscale, BitDepth::Eight),
-        DynamicImage::ImageLumaA8(image) => (image.into_raw(), GrayscaleAlpha, BitDepth::Eight),
-        DynamicImage::ImageRgba8(image) => (image.into_raw(), Rgba, BitDepth::Eight),
-        DynamicImage::ImageBgr8(image) => (
-            DynamicImage::ImageBgr8(image).into_rgb8().into_raw(),
-            Rgb,
-            BitDepth::Eight,
-        ),
-        DynamicImage::ImageBgra8(image) => (
-            DynamicImage::ImageBgra8(image).into_rgb8().into_raw(),
-            Rgb,
-            BitDepth::Eight,
-        ),
-        DynamicImage::ImageLuma16(image) => (
+        DynamicImage::ImageRgb8(image) => Ok((image.into_raw(), Rgb, BitDepth::Eight)),
+        DynamicImage::ImageLuma8(image) => Ok((image.into_raw(), Grayscale, BitDepth::Eight)),
+        DynamicImage::ImageLumaA8(image) => Ok((image.into_raw(), GrayscaleAlpha, BitDepth::Eight)),
+        DynamicImage::ImageRgba8(image) => Ok((image.into_raw(), Rgba, BitDepth::Eight)),
+        DynamicImage::ImageLuma16(image) => Ok((
             vec16_to_vec8(image.into_raw()),
             Grayscale,
             BitDepth::Sixteen,
-        ),
-        DynamicImage::ImageLumaA16(image) => (
+        )),
+        DynamicImage::ImageLumaA16(image) => Ok((
             vec16_to_vec8(image.into_raw()),
             GrayscaleAlpha,
             BitDepth::Sixteen,
-        ),
+        )),
         DynamicImage::ImageRgb16(image) => {
-            (vec16_to_vec8(image.into_raw()), Rgb, BitDepth::Sixteen)
+            Ok((vec16_to_vec8(image.into_raw()), Rgb, BitDepth::Sixteen))
         }
         DynamicImage::ImageRgba16(image) => {
-            (vec16_to_vec8(image.into_raw()), Rgba, BitDepth::Sixteen)
+            Ok((vec16_to_vec8(image.into_raw()), Rgba, BitDepth::Sixteen))
         }
+        _ => Err(AppError::UnsupportedImage),
     }
 }

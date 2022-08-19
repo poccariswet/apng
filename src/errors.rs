@@ -21,4 +21,6 @@ pub type AppResult<T> = Result<T, AppError>;
 pub enum AppError {
     #[error("png decode error: {0}")]
     PNGImage(png::DecodingError),
+    #[error("Unsupported image")]
+    UnsupportedImage,
 }
