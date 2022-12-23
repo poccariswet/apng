@@ -1,6 +1,6 @@
 [package]
 name = "apng"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["poccariswet <poccariswet2727@gmail.com>"]
 edition = "2021"
 description = "APNG Encoder. But it is tiny yet."
@@ -9,7 +9,7 @@ repository = "http://github.com/poccariswet/apng"
 readme = "README.md"
 
 [dependencies]
-png = "0.17.1"
+png = "0.17.7"
 thiserror = "1.0.29"
 byteorder = "1.3.4"
 flate2 = "1.0.22"

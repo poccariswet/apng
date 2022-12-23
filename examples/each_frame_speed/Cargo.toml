@@ -2,10 +2,9 @@
 name = "each_frame_speed"
 version = "0.1.0"
 authors = ["poccariswet <s1240231@gmail.com>"]
-edition = "2018"
-
+edition = "2021"
 
 [dependencies]
 apng = { path = "../../" }
-png = "0.16.0"
+png = "0.17.7"
 image = "0.24.3"
