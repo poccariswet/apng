@@ -3,9 +3,9 @@
 [![apng at crates.io](https://img.shields.io/crates/v/apng.svg)](https://crates.io/crates/apng)
 [![apng at docs.rs](https://docs.rs/apng/badge.svg)](https://docs.rs/apng)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/poccariswet/apng/master/LICENSE?token=AF4FJMPRTUTCG2DAVLVTRVS5U7UJI)
-![apng at github actions](https://github.com/poccariswet/apng/workflows/Rust/badge.svg?branch=master)
+![apng at GitHub Actions](https://github.com/poccariswet/apng/workflows/Rust/badge.svg?branch=master)
 
-apng is animated png encoder for rust, and made in pure rust.
+apng is animated png encoder for Rust, and made in pure Rust.
 
 <img src="https://github.com/poccariswet/apng/blob/master/examples/_rust_logo/out.png" width="250">
 
@@ -45,7 +45,7 @@ fn main() {
 }
 ```
 
-### customize each frame speed
+### Customize each frame speed
 
 <img src="https://github.com/poccariswet/apng/blob/master/examples/each_frame_speed/out.png" width="250">
 
@@ -62,14 +62,15 @@ fn main() {
     }
 ```
 
-sample code is [here](https://github.com/poccariswet/apng/tree/master/examples/each_frame_speed).
+Sample code is [here](https://github.com/poccariswet/apng/tree/master/examples/each_frame_speed).
 
 ## License
 
-[here](https://github.com/poccariswet/apng/blob/master/LICENSE)
+[MIT](https://github.com/poccariswet/apng/blob/master/LICENSE)
 
-## see also
-[medium](https://medium.com/@poccariswet/how-i-developed-apng-library-for-rust-98d366f1195b)
+## See also
+
+- [Medium article about apng](https://medium.com/@poccariswet/how-i-developed-apng-library-for-rust-98d366f1195b)
 
 ## Reference
 
