@@ -50,7 +50,7 @@ pub struct Encoder<'a, W: io::Write> {
 impl<'a, W: io::Write> Encoder<'a, W> {
     pub fn new(writer: &'a mut W, config: Config) -> APNGResult<Self> {
         let mut e = Encoder {
-            config: config,
+            config,
             w: writer,
             seq_num: 0,
         };
@@ -62,8 +62,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
 
     // all png images encode to apng
     pub fn encode_all(&mut self, images: Vec<PNGImage>, frame: Option<&Frame>) -> APNGResult<()> {
-        let mut i = 0;
-        for v in images.iter() {
+        for (i, v) in images.iter().enumerate() {
             if i == 0 {
                 Self::write_fc_tl(self, frame)?;
                 Self::write_idats(self, &v.data)?;
@@ -71,7 +70,6 @@ impl<'a, W: io::Write> Encoder<'a, W> {
                 Self::write_fc_tl(self, frame)?;
                 Self::write_fd_at(self, &v.data)?;
             }
-            i += 1;
         }
         Self::write_iend(self)?;
         Ok(())
@@ -184,7 +182,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         let filter_method = self.config.filter;
 
         for line in data.chunks(in_len) {
-            current.copy_from_slice(&line);
+            current.copy_from_slice(line);
             zlib.write_all(&[filter_method as u8])?;
             filter(filter_method, bpp, &prev, &mut current);
             zlib.write_all(&current)?;
@@ -206,7 +204,7 @@ impl<'a, W: io::Write> Encoder<'a, W> {
         let mut crc = Crc::new();
         crc.update(&c_type);
         crc.update(c_data);
-        self.w.write_u32::<BigEndian>(crc.sum() as u32)?;
+        self.w.write_u32::<BigEndian>(crc.sum())?;
         Ok(())
     }
 }
@@ -237,7 +235,7 @@ pub enum BlendOp {
 }
 
 pub fn create_config(images: &Vec<PNGImage>, plays: Option<u32>) -> APNGResult<Config> {
-    if images.len() == 0 {
+    if images.is_empty() {
         return Err(APNGError::ImagesNotFound);
     }
     let default_image = images[0].clone();
@@ -245,7 +243,7 @@ pub fn create_config(images: &Vec<PNGImage>, plays: Option<u32>) -> APNGResult<C
         width: default_image.width,
         height: default_image.height,
         num_frames: images.len() as u32,
-        num_plays: plays.and_then(|p| Some(p)).unwrap_or(0),
+        num_plays: plays.unwrap_or(0),
         color: default_image.color_type,
         depth: default_image.bit_depth,
         filter: png::FilterType::NoFilter, //default
