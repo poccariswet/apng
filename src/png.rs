@@ -18,8 +18,8 @@ pub fn load_dynamic_image(img: image::DynamicImage) -> AppResult<PNGImage> {
     let (data, color_type, bit_depth) = get_raw_buffer_dynamic_image(img)?;
 
     Ok(PNGImage {
-        width: width,
-        height: height,
+        width,
+        height,
         data,
         color_type,
         bit_depth,
