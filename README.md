@@ -74,5 +74,5 @@ Sample code is [here](https://github.com/poccariswet/apng/tree/master/examples/e
 
 ## Reference
 
-- [https://developer.mozilla.org/ja/docs/Animated_PNG_graphics](https://developer.mozilla.org/ja/docs/Animated_PNG_graphics)
+- [https://developer.mozilla.org/ja/docs/Animated_PNG_graphics](https://web.archive.org/web/20210420033916/https://developer.mozilla.org/ja/docs/Animated_PNG_graphics) ([English](https://web.archive.org/web/20210506203924/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/APNG))
 - [https://www.w3.org/TR/PNG/](https://www.w3.org/TR/PNG/)
