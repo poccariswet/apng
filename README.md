@@ -7,7 +7,7 @@
 
 apng is animated png encoder for Rust, and made in pure Rust.
 
-<img src="https://github.com/poccariswet/apng/blob/master/examples/_rust_logo/out.png" width="250">
+<img src="https://raw.githubusercontent.com/poccariswet/apng/master/examples/_rust_logo/out.png" width="250">
 
 ## Example usage
 
@@ -47,7 +47,7 @@ fn main() {
 
 ### Customize each frame speed
 
-<img src="https://github.com/poccariswet/apng/blob/master/examples/each_frame_speed/out.png" width="250">
+<img src="https://raw.githubusercontent.com/poccariswet/apng/master/examples/_rust_logo/out.png" width="250">
 
 ```rust
     let mut i = 1;
