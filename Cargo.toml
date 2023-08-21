@@ -5,7 +5,7 @@ authors = ["poccariswet <poccariswet2727@gmail.com>"]
 edition = "2021"
 description = "APNG Encoder. But it is tiny yet."
 license = "MIT"
-repository = "http://github.com/poccariswet/apng"
+repository = "https://github.com/poccariswet/apng"
 readme = "README.md"
 
 [dependencies]
