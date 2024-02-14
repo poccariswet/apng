@@ -1,7 +1,10 @@
 [package]
 name = "apng"
-version = "0.3.1"
-authors = ["poccariswet <poccariswet2727@gmail.com>"]
+version = "0.3.2"
+authors = [
+  "poccariswet <poccariswet2727@gmail.com>",
+  "Orhun Parmaksız <orhunparmaksiz@gmail.com>",
+]
 edition = "2021"
 description = "APNG Encoder. But it is tiny yet."
 license = "MIT"
