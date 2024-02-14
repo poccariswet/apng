@@ -47,7 +47,7 @@ fn main() {
 
 # Feature Flags
 
-- `png`: re-exports the types from `png` crate
+- `png`: re-exports the types from `png` crate (as `image_png`)
 
 */
 
