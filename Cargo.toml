@@ -14,3 +14,6 @@ thiserror = "1.0.38"
 byteorder = "1.4.3"
 flate2 = "1.0.25"
 image = { version = "0.24.5", default-features = false, features = ["png"] }
+
+[features]
+png = []
