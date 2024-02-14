@@ -1,6 +1,6 @@
 [package]
 name = "apng"
-version = "0.3.2"
+version = "0.3.3"
 authors = [
   "poccariswet <poccariswet2727@gmail.com>",
   "Orhun Parmaksız <orhunparmaksiz@gmail.com>",
