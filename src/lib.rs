@@ -59,4 +59,4 @@ pub use crate::apng::*;
 pub use crate::png::*;
 
 #[cfg(feature = "png")]
-pub use png as image_png;
+pub use ::png as image_png;
