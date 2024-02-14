@@ -16,4 +16,5 @@ flate2 = "1.0.25"
 image = { version = "0.24.5", default-features = false, features = ["png"] }
 
 [features]
+# re-exports png crate
 png = []
