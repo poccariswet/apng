@@ -5,7 +5,12 @@ apng is animated png encoder for Rust, and made in pure Rust.
 
 # Example
 
-```rust
+```no_run
+use apng::{Encoder, Frame, PNGImage};
+use std::fs::File;
+use std::io::BufWriter;
+use std::path::Path;
+
 fn main() {
     let files = vec![
         "rust_logo1.png",
